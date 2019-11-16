@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <script type="text/javascript" src="{{ url_for('static', filename = 'mock.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'jquery.dropdown.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!--script src="https://code.jquery.com/jquery-1.12.4.min.js"></script-->
+    <script src="{{ url_for('static', filename = 'jquery.dropdown.js') }}"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <title></title>
+    <style>
+      .container { margin:150px auto;}
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2> Searchable Multi-select Dropdown Demos</h2>
+      <br>
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="text-info">Multi-select+JSON+Token Mode</div><br>
+          <div class="dropdown-mul-1">
+            <select style="display:none"  name="" id="" multiple placeholder="Select"> </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button type="button" class="btn btn-primary" id="abc">Primary</button>
+  </body>
+  <script>
+    obj = {
+      getRecommendations: function(books) {
+        console.log(books)
+        /*$.post("http://localhost:5000/get_recommendation", books, function(result) {
+            console.log(result);
+        });*/
+        $.ajax({type: "POST", url: "http://localhost:5000/get_recommendation", data: books, contentType: "application/json", success: function(result) {
+            console.log(result);
+        }});
+      },
+      prepareData: function() {
+        //console.log("called");
+        var books = $('select').val()
+        obj.getRecommendations(JSON.stringify(books));
+      }
+    };
+    $("button").click(function() {
+      obj.prepareData();
+    });
+    $.ajax({url: "http://localhost:5000/load_data", success: function() {console.log("called")}});
+    var data;
+    $.ajax({url: "http://localhost:5000/books.csv", success: function(response) {
+      data = JSON.parse(response);
+      console.log(data[0]);
+      chooseNames(data);
+    }});
+    function chooseNames(data) {
+      var i=0
+      var Random = Mock.Random;
+      var json1 = Mock.mock({
+        "data|100": [{
+          name: function () {
+            //return Random.name(true)
+            return data[i++];
+          },
+          "id|+1": 1,
+          //"disabled|1-2": true,
+          groupName: 'Group Name',
+          "groupId|": 1,
+          "selected": false
+        }]
+      });
+
+      $('.dropdown-mul-1').dropdown({
+        data: json1.data,
+        limitCount: 400,
+        multipleMode: 'label',
+        choice: function () {
+          // console.log(arguments,this);
+        }
+      });
+    }
+  </script>
+</html>
