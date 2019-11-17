@@ -35,12 +35,11 @@
 			JS
 			=============================================== -->
 			<script type="text/javascript" src="{{ url_for('static', filename = 'mock.js') }}"></script>
+	    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	    <!--script src="https://code.jquery.com/jquery-1.12.4.min.js"></script-->
-	    <script src="{{ url_for('static', filename = 'jquery.dropdown.js') }}"></script>
-			<script src="{{ url_for('static', filename = 'js/vendor/jquery-2.2.4.min.js') }}"></script>
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+			<<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 			<script src="{{ url_for('static', filename = 'js/vendor/bootstrap.min.js') }}"></script>
+			<script src="{{ url_for('static', filename = 'js/vendor/jquery-2.2.4.min.js') }}"></script>
 			<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhOdIF3Y9382fqJYt5I_sswSrEw5eihAA"></script>
   		<script src="{{ url_for('static', filename = 'js/easing.min.js') }}"></script>
 			<script src="{{ url_for('static', filename = 'js/hoverIntent.js') }}"></script>
@@ -55,6 +54,7 @@
 			<script src="{{ url_for('static', filename = 'js/jquery.counterup.min.js') }}"></script>
 			<script src="{{ url_for('static', filename = 'js/mail-script.js') }}"></script>
 			<script src="{{ url_for('static', filename = 'js/main.js') }}"></script>
+	    <script src="{{ url_for('static', filename = 'jquery.dropdown.js') }}"></script>
 
 			<script>
 		    obj = {
@@ -80,7 +80,7 @@
 		      chooseNames(data);
 		    }});
 		    function chooseNames(data) {
-					alert("data");
+					alert("datas");
 		      var i=0;
 		      var Random = Mock.Random;
 		      var json1 = Mock.mock({
