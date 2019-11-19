@@ -4,7 +4,7 @@
 		<!-- Mobile Specific Meta -->
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<!-- Favicon-->
-		<link rel="shortcut icon" href="img/fav.png">
+		<link rel="shortcut icon" href="{{ url_for('static', filename = 'img/fav.png') }}">
 		<!-- Author Meta -->
 		<meta name="author" content="codepixer">
 		<!-- Meta Description -->
@@ -17,9 +17,12 @@
 		<title>Book</title>
 
 		<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=ABeeZee|Caveat|Dancing+Script|Dosis|Indie+Flower|Kalam|Kaushan+Script|Lobster+Two|Merriweather+Sans|Neuton|Noto+Serif|Nunito+Sans|Open+Sans|Pacifico|Satisfy|Shadows+Into+Light|Slabo+27px|Ubuntu+Condensed|Yrsa&display=swap" rel="stylesheet">
 			<!--
 			CSS
 			============================================= -->
+			<link href="//goo.gl/mTc43h" rel="stylesheet">
+
 			<link rel="stylesheet" href="{{ url_for('static', filename = 'css/linearicons.css') }}">
 			<link rel="stylesheet" href="{{ url_for('static', filename = 'css/font-awesome.min.css') }}">
 			<link rel="stylesheet" href="{{ url_for('static', filename = 'css/bootstrap.css') }}">
@@ -28,88 +31,64 @@
 			<link rel="stylesheet" href="{{ url_for('static', filename = 'css/animate.min.css') }}">
 			<link rel="stylesheet" href="{{ url_for('static', filename = 'css/owl.carousel.css') }}">
 			<link rel="stylesheet" href="{{ url_for('static', filename = 'css/main.css') }}">
-	    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'jquery.dropdown.css') }}">
-	  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+		  <link rel="stylesheet" href="{{ url_for('static', filename = 'css/scrollable.css')}}">
+			<link rel="stylesheet" href="{{ url_for('static', filename = 'css/checkbox.css') }}">
+			<link rel="stylesheet" href="{{ url_for('static', filename = 'multi-select/jquery.multiselect.css') }}">
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 
-			<!--
-			JS
-			=============================================== -->
-			<script type="text/javascript" src="{{ url_for('static', filename = 'mock.js') }}"></script>
-	    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-			<<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-			<script src="{{ url_for('static', filename = 'js/vendor/bootstrap.min.js') }}"></script>
-			<script src="{{ url_for('static', filename = 'js/vendor/jquery-2.2.4.min.js') }}"></script>
-			<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhOdIF3Y9382fqJYt5I_sswSrEw5eihAA"></script>
-  		<script src="{{ url_for('static', filename = 'js/easing.min.js') }}"></script>
-			<script src="{{ url_for('static', filename = 'js/hoverIntent.js') }}"></script>
-			<script src="{{ url_for('static', filename = 'js/superfish.min.js') }}"></script>
-			<script src="{{ url_for('static', filename = 'js/jquery.ajaxchimp.min.js') }}"></script>
-			<script src="{{ url_for('static', filename = 'js/jquery.magnific-popup.min.js') }}"></script>
-			<script src="{{ url_for('static', filename = 'js/owl.carousel.min.js') }}"></script>
-			<script src="{{ url_for('static', filename = 'js/jquery.sticky.js') }}"></script>
-			<script src="{{ url_for('static', filename = 'js/jquery.nice-select.min.js') }}"></script>
-			<script src="{{ url_for('static', filename = 'js/parallax.min.js') }}"></script>
-			<script src="{{ url_for('static', filename = 'js/waypoints.min.js') }}"></script>
-			<script src="{{ url_for('static', filename = 'js/jquery.counterup.min.js') }}"></script>
-			<script src="{{ url_for('static', filename = 'js/mail-script.js') }}"></script>
-			<script src="{{ url_for('static', filename = 'js/main.js') }}"></script>
-	    <script src="{{ url_for('static', filename = 'jquery.dropdown.js') }}"></script>
-
-			<script>
-		    obj = {
-		      getRecommendations: function(books) {
-		        console.log(books)
-		        $.ajax({type: "POST", url: "http://localhost:5000/get_recommendation", data: books, contentType: "application/json", success: function(result) {
-		            console.log(result);
-		        }});
-		      },
-		      prepareData: function() {
-		        var books = $('select').val()
-		        obj.getRecommendations(JSON.stringify(books));
-		      }
-		    };
-		    $("button").click(function() {
-		      obj.prepareData();
-		    });
-		    $.ajax({url: "http://localhost:5000/load_data", success: function() {console.log("called")}});
-		    var data;
-		    $.ajax({url: "http://localhost:5000/books.csv", success: function(response) {
-		      data = JSON.parse(response);
-		      console.log(data[0]);
-		      chooseNames(data);
-		    }});
-		    function chooseNames(data) {
-					alert("datas");
-		      var i=0;
-		      var Random = Mock.Random;
-		      var json1 = Mock.mock({
-		        "data|100": [{
-		          name: function () {
-		            return data[i++];
-		          },
-		          "id|+1": 1,
-		          //"disabled|1-2": true,
-		          groupName: 'Group Name',
-		          "groupId|": 1,
-		          "selected": false
-		        }]
-		      });
-
-		      $('.dropdown-mul-1').dropdown({
-		        data: json1.data,
-		        limitCount: 400,
-		        multipleMode: 'label',
-		        choice: function () {
-		          // console.log(arguments,this);
-		        }
-		      });
-		    }
-		  </script>
-
-			<!--style>
-	      .container { margin:150px auto;}
-	    </style-->
+			<style media="screen">
+				body {
+					color: #333;
+				}
+				footer {
+					color: #ddd;
+				}
+				label {
+					font-family: 'Slabo 27px', serif;
+				}
+				#ms-list-1 > div > div > input[type=text] {
+					font-family: 'Dosis', sans-serif;
+				}
+				#ms-list-1 > div > a {
+					font-family: 'Noto Serif', serif;
+				}
+				button {
+					border-radius: 4px;
+				}
+				#home > div > div > div.banner-content.col-lg-7 > h5 {
+					font-size: 18px;
+				}
+				#ms-list-1 > button > span {
+					font-family: 'Ubuntu Condensed', sans-serif;
+				}
+				#ms-list-1 > div {
+					border-radius: 4px;
+				}
+				.cursive {
+					font-family: 'Pacifico', cursive;
+					font-size: 18px;
+				}
+				#course > div > div.row.d-flex.justify-content-center > div > div > h1 {
+					font-family: 'Neuton', serif;
+					font-size: 60px;
+				}
+				.nunito {
+					font-family: 'Nunito Sans', sans-serif;
+				}
+				#price > div > div.row.d-flex.justify-content-center > div > div > h1 {
+					font-family: 'Merriweather Sans', sans-serif;
+				}
+				#about > div > div > div.col-lg-6.col-md-12.no-padding.info-rigth > div > h2 {
+					font-family: 'Yrsa', serif;
+				}
+				#about > div > div > div.col-lg-6.col-md-12.no-padding.info-rigth > div > p:nth-child(3) {
+					font-family: 'ABeeZee', sans-serif;
+				}
+				#about > div > div > div.col-lg-6.col-md-12.no-padding.info-rigth > div > p:nth-child(5) {
+					font-family: 'Kalam', cursive;
+					font-size: 18px;
+				}
+			</style>
 		</head>
 		<body>
 
@@ -122,8 +101,8 @@
 				      <nav id="nav-menu-container">
 				        <ul class="nav-menu">
 				          <li class="menu-active"><a href="#home">Home</a></li>
-				          <!--<li><a href="#about">About</a></li>
-				          <li><a href="#fact">Fact</a></li>-->
+				          <!--li><a href="#about">About</a></li>
+				          <li><a href="#fact">Fact</a></li!-->
 				          <li><a href="#price">Price</a></li>
 				          <li><a href="#course">Course</a></li>
 				          <li class="menu-has-children"><a href="">Pages</a>
@@ -144,11 +123,11 @@
 				<div class="container">
 					<div class="row fullscreen d-flex align-items-center justify-content-start">
 						<div class="banner-content col-lg-7">
-							<h5 class="text-white text-uppercase">Select Books from the list</h5>
-							<div class="dropdown-mul-1">
-								<select name="" id="" multiple placeholder="Select"> </select>
-							</div>
-							<a href="#" class="primary-btn text-uppercase">that's it.</a>
+							<h5 class="text-white text-uppercase">select books from the list</h5>
+							<br>
+							<select multiple></select>
+							<br><br><br>
+							<input type="button" value="THAT'S IT" class="primary-btn text-uppercase" />
 						</div>
 						<div class="col-lg-5 banner-right">
 							<img class="img-fluid" src="{{ url_for('static', filename = 'img/header-img.png') }}" alt="">
@@ -159,80 +138,77 @@
 			<!-- End banner Area -->
 
 			<!-- Start about Area -->
-			<!--<section class="section-gap info-area" id="about">
+			<section class="section-gap info-area" id="about">
 				<div class="container">
 					<div class="single-info row mt-40 align-items-center">
 						<div class="col-lg-6 col-md-12 text-center no-padding info-left">
 							<div class="info-thumb">
-								<img src="img/about-img.jpg" class="img-fluid info-img" alt="">
+								<img src="{{ url_for('static', filename = 'img/books/city-of-girls.jpg') }}" class="img-fluid info-img" alt="">
 							</div>
 						</div>
 						<div class="col-lg-6 col-md-12 no-padding info-rigth">
 							<div class="info-content">
-								<h2 class="pb-30">Dr. Travor James</h2>
+								<h2 class="pb-30">Elizabeth Gilbert's <u>City Of Girls</u></h2>
 								<p>
-									inappropriate behavior is often laughed off as “boys will be boys,” women face higher conduct standards – especially in the workplace. That’s why it’s crucial that, as women.
+									<p><b><b>AN INSTANT </b><b><i>NEW YORK TIMES</i></b><b> BESTSELLER!</b><br><br><b>From the # 1 </b><b><i>New York Times</i></b><b> bestselling author of </b><b><i>Eat Pray Love</i></b><b> and </b><b><i>The Signature of All Things</i></b><b>, a delicious novel of glamour, sex, and adventure, about a young woman discovering that you don't have to be a </b><b><i>good girl</i></b><b> to be a good person.</b></p><br><p><b>"A spellbinding novel about love, freedom, and finding your own happiness." - PopSugar</b><br><br><b>"Intimate and richly sensual, razzle-dazzle with a hint of danger." -</b><b><i>USA Today</i></b><br><br><b>"Pairs well with a cocktail...or two." -</b><b><i>TheSkimm</i></b></b></p>
 								</p>
 								<br>
-								<p>
-									inappropriate behavior is often laughed off as “boys will be boys,” women face higher conduct standards – especially in the workplace. That’s why it’s crucial that, as women. inappropriate behavior is often laughed off as “boys will be boys,” women face higher conduct standards – especially in the workplace. That’s why it’s crucial that, as women.
-								</p>
 								<br>
-								<img src="img/signature.png" alt="">
+								<!--img src="{{ url_for('static', filename = 'img/signature.png') }}" alt=""-->
 								</div>
 						</div>
 					</div>
 				</div>
-			</section>-->
+			</section>
 			<!-- End about Area -->
 
 			<!-- Start fact Area -->
-			<!--<section class="fact-area relative section-gap" id="fact">
+			<section class="fact-area relative section-gap" id="fact">
 				<div class="overlay overlay-bg"></div>
 				<div class="container">
 					<div class="row d-flex justify-content-center">
 						<div class="menu-content pb-40 col-lg-8">
 							<div class="title text-center">
 								<h1 class="mb-10">Some Features that Made us Unique</h1>
-								<p>Who are in extremely love with eco friendly system.</p>
+								<p class="nunito">Who are in extremely love with eco friendly system.</p>
 							</div>
 						</div>
 					</div>
 				</div>
-			</section>-->
+			</section>
 			<!-- End fact Area -->
 
 			<!-- Start counter Area -->
-			<!--<section class="counter-area">
+			<section class="counter-area">
 				<div class="container">
 					<div class="row">
 						<div class="col-lg-3 col-md-6">
 							<div class="single-counter">
-								<h1 class="counter">2536</h1>
-								<p>Happy Clients</p>
+								<h1 class="counter">10000</h1>
+								<p>Book Titles</p>
 							</div>
 						</div>
 						<div class="col-lg-3 col-md-6">
 							<div class="single-counter">
-								<h1 class="counter">6784</h1>
-								<p>Total Projects</p>
+								<h1 class="counter">981756</h1>
+								<p>User Ratings</p>
 							</div>
 						</div>
 						<div class="col-lg-3 col-md-6">
 							<div class="single-counter">
-								<h1 class="counter">1059</h1>
-								<p>Cups Coffee</p>
+								<h1 class="counter">57000</h1>
+								<p>Book Covers</p>
 							</div>
 						</div>
 						<div class="col-lg-3 col-md-6">
 							<div class="single-counter">
-								<h1 class="counter">12239</h1>
-								<p>Tickets Submitted</p>
+								<h1 class="counter">30</h1>
+								<p>Book Categories</p>
 							</div>
 						</div>
 					</div>
 				</div>
-			</section>-->
+			</section>
 			<!-- end counter Area -->
 
 			<!-- Start price Area -->
@@ -242,7 +218,7 @@
 						<div class="menu-content pb-60 col-lg-8">
 							<div class="title text-center">
 								<h1 class="mb-10">Purchase whatever you want</h1>
-								<p>Who are in extremely love with eco friendly system.</p>
+								<p class="nunito">Who are in extremely love with eco friendly system.</p>
 							</div>
 						</div>
 					</div>
@@ -252,7 +228,7 @@
 								<div class="price-top">
 									<h4>PDF</h4>
 								</div>
-								<p>
+								<p class="nunito">
 									Who are in extremely love with <br>
 									eco friendly system.
 								</p>
@@ -267,7 +243,7 @@
 								<div class="price-top">
 									<h4>E-Book</h4>
 								</div>
-								<p>
+								<p class="nunito">
 									Who are in extremely love with <br>
 									eco friendly system.
 								</p>
@@ -282,7 +258,7 @@
 								<div class="price-top">
 									<h4>Print Copy</h4>
 								</div>
-								<p>
+								<p class="nunito">
 									Who are in extremely love with <br>
 									eco friendly system.
 								</p>
@@ -303,40 +279,108 @@
 					<div class="row d-flex justify-content-center">
 						<div class="menu-content pb-60 col-lg-9">
 							<div class="title text-center">
-								<h1 class="mb-10">Top Courses That are open for Students</h1>
-								<p>Who are in extremely love with eco friendly system.</p>
+								<h1 class="mb-10">The 10 best books of 2019 so far, according to Amazon</h1>
+								<p class="nunito">Who are in extremely love with eco friendly system.</p>
 							</div>
 						</div>
 					</div>
 					<div class="row">
 						<div class="active-course-carusel">
 							<div class="single-course item">
-								<img class="img-fluid" src="{{ url_for('static', filename = 'img/c1.jpg') }}" alt="">
-								<p class="sale-btn">For Sale</p>
+								<img class="img-fluid" src="{{ url_for('static', filename = 'img/books/the-silent-patient.jpeg') }}" alt="">
+								<!--p class="sale-btn">For Sale</p-->
 								<div class="details">
-									<a href="#"><h4>Breakthrough Thinking <span class="price float-right">$25</span></h4></a>
-									<p>
-										Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+									<a href="#"><h4>The Silent Patient <span class="price float-right">$14.99</span></h4></a>
+									<p class="cursive">"An unforgettable―and Hollywood-bound―new thriller... A mix of Hitchcockian suspense, Agatha Christie plotting, and Greek tragedy."<br><b>―<i>Entertainment Weekly</i></b></p>
+								</div>
+							</div>
+							<div class="single-course item">
+								<img class="img-fluid" src="{{ url_for('static', filename = 'img/books/once-more-we-saw-stars.jpeg') }}" alt="">
+								<!--p class="sale-btn">For Sale</p-->
+								<div class="details">
+									<a href="#"><h4>Once More We Saw Stars <span class="price float-right">$15.99</span></h4></a>
+									<p class="cursive">
+										For readers of <i>The Bright Hour</i> and <i>When Breath Becomes Air,</i> a moving, transcendent memoir of loss and a stunning exploration of marriage in the wake of unimaginable grief.
 									</p>
 								</div>
 							</div>
 							<div class="single-course item">
-								<img class="img-fluid" src="{{ url_for('static', filename = 'img/c2.jpg') }}" alt="">
-								<p class="sale-btn">For Sale</p>
+								<img class="img-fluid" src="{{ url_for('static', filename = 'img/books/mrs-everything.jpeg') }}" alt="">
+								<!--p class="sale-btn">For Sale</p-->
 								<div class="details">
-									<a href="#"><h4>Breakthrough Thinking <span class="price float-right">$25</span></h4></a>
-									<p>
-										Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+									<a href="#"><h4>Mrs. Everything <span class="price float-right">$14.99</span></h4></a>
+									<p class="cursive">
+										Named a Best Book of Summer by <i>Entertainment Weekly</i>, <i>Cosmopolitan</i>, <i>Woman’s Day</i>, <i>PopSugar</i>, <i>HelloGiggles</i>, and Refinery29
 									</p>
 								</div>
 							</div>
 							<div class="single-course item">
-								<img class="img-fluid" src="{{ url_for('static', filename = 'img/c3.jpg') }}" alt="">
-								<p class="sale-btn">For Sale</p>
+								<img class="img-fluid" src="{{ url_for('static', filename = 'img/books/the-night-tiger.jpeg') }}" alt="">
+								<!--p class="sale-btn">For Sale</p-->
 								<div class="details">
-									<a href="#"><h4>Breakthrough Thinking <span class="price float-right">$25</span></h4></a>
-									<p>
-										Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+									<a href="#"><h4>The Night Tiger <span class="price float-right">$14.99</span></h4></a>
+									<p class="cursive">
+										“A sumptuous garden maze of a novel that immerses readers in a complex, vanished world.” ―<b><i>Kirkus </i></b>(starred review)
+									</p>
+								</div>
+							</div>
+							<div class="single-course item">
+								<img class="img-fluid" src="{{ url_for('static', filename = 'img/books/daisy-jones-and-the-six.jpeg') }}" alt="">
+								<!--p class="sale-btn">For Sale</p-->
+								<div class="details">
+									<a href="#"><h4>Daisy Jones And The Six <span class="price float-right">$13.99</span></h4></a>
+									<p class="cursive">
+										Presented as a series of interviews, this novel about a young, captivating singer who came of age in the late '60s/early '70s will leave you thinking that "Daisy Jones &amp; The Six" really existed.
+									</p>
+								</div>
+							</div>
+							<div class="single-course item">
+								<img class="img-fluid" src="{{ url_for('static', filename = 'img/books/underland.jpeg') }}" alt="">
+								<!--p class="sale-btn">For Sale</p-->
+								<div class="details">
+									<a href="#"><h4>Underland <span class="price float-right">$17.99</span></h4></a>
+									<p class="cursive">
+										The highly anticipated new book from the internationally bestselling, prize-winning author of <i>Landmarks, The Lost Words </i>and <i>The Old Ways</i>
+									</p>
+								</div>
+							</div>
+							<div class="single-course item">
+								<img class="img-fluid" src="{{ url_for('static', filename = 'img/books/the-unwinding-of-the-miracle.jpeg') }}" alt="">
+								<!--p class="sale-btn">For Sale</p-->
+								<div class="details">
+									<a href="#"><h4>The Unwinding Of The Miracle <span class="price float-right">$16.99</span></h4></a>
+									<p class="cursive">
+										“An exquisitely moving portrait of the daily stuff of life.”—<i>The New York Times Book Review&nbsp;</i><b>(Editors’ Choice)</b>
+									</p>
+								</div>
+							</div>
+							<div class="single-course item">
+								<img class="img-fluid" src="{{ url_for('static', filename = 'img/books/save-me-the-palms.jpeg') }}" alt="">
+								<!--p class="sale-btn">For Sale</p-->
+								<div class="details">
+									<a href="#"><h4>Save Me The Palms <span class="price float-right">$15.99</span></h4></a>
+									<p class="cursive">
+										“A must for any food lover . . .&nbsp;Reichl is a warm, intimate writer. She peels back the curtain to a glamorous time of magazine-making. You’ll tear through this memoir.”—<b><i>Refinery29</i>&nbsp;(The Best New Books of April 2019)</b>
+									</p>
+								</div>
+							</div>
+							<div class="single-course item">
+								<img class="img-fluid" src="{{ url_for('static', filename = 'img/books/cari-mora.jpeg') }}" alt="">
+								<!--p class="sale-btn">For Sale</p-->
+								<div class="details">
+									<a href="#"><h4>Cari Mora <span class="price float-right">$17.99</span></h4></a>
+									<p class="cursive">
+										A resilient young woman must outwit a sadistic psychopath in this pulse-pounding thriller from the author of <i>The Silence of the Lambs, </i>a "master still at the top of his strange and chilling form" <b>(<i>Wall Street Journal</i>).</b>
+									</p>
+								</div>
+							</div>
+							<div class="single-course item">
+								<img class="img-fluid" src="{{ url_for('static', filename = 'img/books/the-remarkable-journey.jpeg') }}" alt="">
+								<!--p class="sale-btn">For Sale</p-->
+								<div class="details">
+									<a href="#"><h4>The Remarkable Journey of Coyote Sunrise <span class="price float-right">$2.99</span></h4></a>
+									<p class="cursive">
+										"Sometimes a story comes along that just plain makes you want to hug the world. <i>The Remarkable Journey of Coyote Sunrise</i> is Dan Gemeinhart’s finest book yet ― and that’s saying something. Your heart needs this joyful miracle of a book." <b>―Katherine Applegate, acclaimed author of <i>The One and Only Ivan </i>and <i>Wishtree</i></b>
 									</p>
 								</div>
 							</div>
@@ -347,7 +391,7 @@
 			<!-- End course Area -->
 
 			<!-- Start call-to-action Area -->
-			<!--<section class="call-to-action-area section-gap">
+			<!--section class="call-to-action-area section-gap">
 				<div class="container">
 					<div class="row justify-content-center top">
 						<div class="col-lg-12">
@@ -384,11 +428,11 @@
 						</div>
 					</div>
 				</div>
-			</section>-->
+			</section-->
 			<!-- End call-to-action Area -->
 
 			<!-- Start testomial Area -->
-			<!--<section class="testomial-area section-gap">
+			<!--section class="testomial-area section-gap">
 				<div class="container">
 					<div class="row d-flex justify-content-center">
 						<div class="menu-content pb-60 col-lg-8">
@@ -401,7 +445,7 @@
 					<div class="row">
 						<div class="active-tstimonial-carusel">
 							<div class="single-testimonial item">
-								<img class="mx-auto" src="img/t1.png" alt="">
+								<img class="mx-auto" src="{{ url_for('static', filename = 'img/t1.png') }}" alt="">
 								<p class="desc">
 									Accessories Here you can find the best computer accessory for your laptop, monitor, printer, scanner, speaker, projector, hardware and more. laptop accessory
 								</p>
@@ -411,7 +455,7 @@
 								</p>
 							</div>
 							<div class="single-testimonial item">
-								<img class="mx-auto" src="img/t2.png" alt="">
+								<img class="mx-auto" src="{{ url_for('static', filename = 'img/t2.png') }}" alt="">
 								<p class="desc">
 									Accessories Here you can find the best computer accessory for your laptop, monitor, printer, scanner, speaker, projector, hardware and more. laptop accessory
 								</p>
@@ -421,7 +465,7 @@
 								</p>
 							</div>
 							<div class="single-testimonial item">
-								<img class="mx-auto" src="img/t3.png" alt="">
+								<img class="mx-auto" src="{{ url_for('static', filename = 'img/t3.png') }}" alt="">
 								<p class="desc">
 									Accessories Here you can find the best computer accessory for your laptop, monitor, printer, scanner, speaker, projector, hardware and more. laptop accessory
 								</p>
@@ -431,7 +475,7 @@
 								</p>
 							</div>
 							<div class="single-testimonial item">
-								<img class="mx-auto" src="img/t1.png" alt="">
+								<img class="mx-auto" src="{{ url_for('static', filename = 'img/t1.png') }}" alt="">
 								<p class="desc">
 									Accessories Here you can find the best computer accessory for your laptop, monitor, printer, scanner, speaker, projector, hardware and more. laptop accessory
 								</p>
@@ -441,7 +485,7 @@
 								</p>
 							</div>
 							<div class="single-testimonial item">
-								<img class="mx-auto" src="img/t2.png" alt="">
+								<img class="mx-auto" src="{{ url_for('static', filename = 'img/t2.png') }}" alt="">
 								<p class="desc">
 									Accessories Here you can find the best computer accessory for your laptop, monitor, printer, scanner, speaker, projector, hardware and more. laptop accessory
 								</p>
@@ -451,7 +495,7 @@
 								</p>
 							</div>
 							<div class="single-testimonial item">
-								<img class="mx-auto" src="img/t3.png" alt="">
+								<img class="mx-auto" src="{{ url_for('static', filename = 'img/t3.png') }}" alt="">
 								<p class="desc">
 									Accessories Here you can find the best computer accessory for your laptop, monitor, printer, scanner, speaker, projector, hardware and more. laptop accessory
 								</p>
@@ -461,7 +505,7 @@
 								</p>
 							</div>
 							<div class="single-testimonial item">
-								<img class="mx-auto" src="img/t1.png" alt="">
+								<img class="mx-auto" src="{{ url_for('static', filename = 'img/t1.png') }}" alt="">
 								<p class="desc">
 									Accessories Here you can find the best computer accessory for your laptop, monitor, printer, scanner, speaker, projector, hardware and more. laptop accessory
 								</p>
@@ -471,7 +515,7 @@
 								</p>
 							</div>
 							<div class="single-testimonial item">
-								<img class="mx-auto" src="img/t2.png" alt="">
+								<img class="mx-auto" src="{{ url_for('static', filename = 'img/t2.png') }}" alt="">
 								<p class="desc">
 									Accessories Here you can find the best computer accessory for your laptop, monitor, printer, scanner, speaker, projector, hardware and more. laptop accessory
 								</p>
@@ -481,7 +525,7 @@
 								</p>
 							</div>
 							<div class="single-testimonial item">
-								<img class="mx-auto" src="img/t3.png" alt="">
+								<img class="mx-auto" src="{{ url_for('static', filename = 'img/t3.png') }}" alt="">
 								<p class="desc">
 									Accessories Here you can find the best computer accessory for your laptop, monitor, printer, scanner, speaker, projector, hardware and more. laptop accessory
 								</p>
@@ -493,7 +537,7 @@
 						</div>
 					</div>
 				</div>
-			</section>-->
+			</section-->
 			<!-- End testomial Area -->
 
 
@@ -505,7 +549,7 @@
 							<div class="single-footer-widget">
 								<h6>About Us</h6>
 								<p>
-									Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore dolore magna aliqua.
+									We recommend books to our users based on their interests. To find out yours <span class="font-weight-bold text-uppercase">sign up</span> now.
 								</p>
 								<p class="footer-text">
 								<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
@@ -519,7 +563,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 								<h6>Newsletter</h6>
 								<p>Stay update with our latest</p>
 								<div class="" id="mc_embed_signup">
-									<form target="_blank" novalidate="true" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01" method="get" class="form-inline">
+									<form target="_blank" novalidate="true" action="" method="get" class="form-inline">
 										<input class="form-control" name="EMAIL" placeholder="Enter Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Email '" required="" type="email">
 			                            	<button class="click-btn btn btn-default"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></button>
 			                            	<div style="position: absolute; left: -5000px;">
@@ -547,5 +591,108 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 				</div>
 			</footer>
 			<!-- End footer Area -->
+
+			<script src="{{ url_for('static', filename = 'js/vendor/jquery-2.2.4.min.js') }}"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+			<script src="{{ url_for('static', filename = 'js/vendor/bootstrap.min.js') }}"></script>
+			<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhOdIF3Y9382fqJYt5I_sswSrEw5eihAA"></script>
+  			<script src="{{ url_for('static', filename = 'js/easing.min.js') }}"></script>
+			<script src="{{ url_for('static', filename = 'js/hoverIntent.js') }}"></script>
+			<script src="{{ url_for('static', filename = 'js/superfish.min.js') }}"></script>
+			<script src="{{ url_for('static', filename = 'js/jquery.ajaxchimp.min.js') }}"></script>
+			<script src="{{ url_for('static', filename = 'js/jquery.magnific-popup.min.js') }}"></script>
+			<script src="{{ url_for('static', filename = 'js/owl.carousel.min.js') }}"></script>
+			<script src="{{ url_for('static', filename = 'js/jquery.sticky.js') }}"></script>
+			<script src="{{ url_for('static', filename = 'js/jquery.nice-select.min.js') }}"></script>
+			<script src="{{ url_for('static', filename = 'js/parallax.min.js') }}"></script>
+			<script src="{{ url_for('static', filename = 'js/waypoints.min.js') }}"></script>
+			<script src="{{ url_for('static', filename = 'js/jquery.counterup.min.js') }}"></script>
+			<script src="{{ url_for('static', filename = 'js/mail-script.js') }}"></script>
+			<script src="{{ url_for('static', filename = 'js/main.js') }}"></script>
+		  <script src="{{ url_for('static', filename = 'multi-select/jquery.multiselect.js') }}"></script>
 		</body>
+		<script type="text/javascript">
+			var value=0;
+			var iteration = 1;
+			//$.ajax({url: "http://localhost:5000/load_data"});
+	    $(document).ready(function() {
+	      //$('select[multiple]').multiselect();
+	      $('select[multiple]').multiselect({
+	        columns: 1,
+	        placeholder: 'Select Books',
+	        search: true,
+	        selectAll: true
+	      });
+	    });
+	    $(document).ready(function() {
+	      $.ajax({url: "http://localhost:5000/books.csv/"+value, success: function(response) {
+	        var book_titles = JSON.parse(response);
+	        for(var i=0; i<100; ++i) {
+	          $("select").append($('<option>').val(i+1).text(book_titles[i]));
+	        }
+					value += 100;
+					iteration += 1;
+	        $("select").multiselect('reload');
+					for(var i=1; i<101; i++) {
+						$("#ms-opt-"+i).addClass("option-input checkbox");
+					}
+					$('#ms-list-1 > div').css('min-height', '325px');
+					$('#ms-list-1 > div > a').addClass("text-uppercase font-weight-bold");
+	        $(".ms-options").addClass("card example-1 scrollbar-ripe-malinka round");
+					$("#ms-list-1").before(jQuery("<div class='col-md-2'></div>"));
+	        $("#ms-list-1").addClass("col-md-8");
+					$("#ms-list-1").after(jQuery("<div class='col-md-2'></div>"));
+					$(".ms-options").scroll(function() {
+						if ($(this)[0].scrollHeight - $(this).scrollTop() <= $(this).outerHeight()) {
+							recursive($(this).scrollTop());
+						}
+					});
+	      }});
+	    });
+			function recursive(scroll_value) {
+				$.ajax({url: "http://localhost:5000/books.csv/"+value, success: function(response) {
+					var book_titles = JSON.parse(response);
+					for(var i=0; i<100; ++i) {
+						$("select").append($('<option>').val(value+i+1).text(book_titles[i]));
+					}
+					$("#ms-list-1").prev().remove();
+					$("#ms-list-1").next().remove();
+					$("select").multiselect('reload');
+					for(var i=value+1; i<=value*(iteration*(iteration+1)/2); i++) {
+						$("#ms-opt-"+i).addClass("option-input checkbox");
+					}
+					$('#ms-list-1 > div').css('min-height', '325px');
+					$('#ms-list-1 > div > a').addClass("text-uppercase font-weight-bold");
+					$(".ms-options").addClass("card example-1 scrollbar-ripe-malinka");
+					$("#ms-list-1").before(jQuery("<div class='col-md-2'></div>"));
+	        $("#ms-list-1").addClass("col-md-8");
+					$("#ms-list-1").after(jQuery("<div class='col-md-2'></div>"));
+					$('.ms-options').scrollTop(scroll_value);
+					$('#ms-list-1 > button').mousedown();
+					value += 100
+					iteration += 1
+					$(".ms-options").scroll(function() {
+						if ($(this)[0].scrollHeight - $(this).scrollTop() <= $(this).outerHeight()) {
+							recursive($(this).scrollTop());
+						}
+					});
+				}
+			});
+			}
+			$(document).ready(function() {
+				$('#home > div > div > div.banner-content.col-lg-7 > input').click(function() {
+					var book_names = $('select').val();
+					console.log(book_names);
+					var input = $('<input type="hidden" name="book_list" value=' + book_names + ' />');
+					var form = jQuery('<form action="http://localhost:5000/get_recommendation" method="POST"><from>').append(input);
+					$("body").append(form);
+					form.submit();
+					//$("body").remove(form);
+					/*$.ajax({url: "http://localhost:5000/get_recommendation", data: JSON.stringify(book_names), type: "POST", contentType: "application/json", success: function(response) {
+						var recommended_books = JSON.parse(response);
+						console.log(recommended_books);
+					}});*/
+				})
+			});
+	  </script>
 	</html>
