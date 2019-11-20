@@ -17,7 +17,7 @@
 		<title>Book</title>
 
 		<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
-		<link href="https://fonts.googleapis.com/css?family=ABeeZee|Caveat|Dancing+Script|Dosis|Indie+Flower|Kalam|Kaushan+Script|Lobster+Two|Merriweather+Sans|Neuton|Noto+Serif|Nunito+Sans|Open+Sans|Pacifico|Satisfy|Shadows+Into+Light|Slabo+27px|Ubuntu+Condensed|Yrsa&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=ABeeZee|Caveat|Dancing+Script|Dosis|Indie+Flower|Kalam|Kaushan+Script|Lobster+Two|Merriweather+Sans|Neuton|Noto+Serif|Nunito+Sans|Open+Sans|Pacifico|Satisfy|Shadows+Into+Light|Slabo+27px|Ubuntu+Condensed|Yrsa|Zilla+Slab&display=swap" rel="stylesheet">
 			<!--
 			CSS
 			============================================= -->
@@ -88,6 +88,13 @@
 					font-family: 'Kalam', cursive;
 					font-size: 18px;
 				}
+				#fact > div.container > div > div > div > h1 {
+					font-family: 'Zilla Slab', serif;
+				}
+				a:focus, a:hover {
+					color: #FFFFFF;
+				  text-decoration: none;
+				}
 			</style>
 		</head>
 		<body>
@@ -104,13 +111,18 @@
 				          <!--li><a href="#about">About</a></li>
 				          <li><a href="#fact">Fact</a></li!-->
 				          <li><a href="#price">Price</a></li>
-				          <li><a href="#course">Course</a></li>
-				          <li class="menu-has-children"><a href="">Pages</a>
+									{% if result == True %}
+									<li><a href="login.html">Log In</a></li>
+				          <li><a href="signup.html">Sign Up</a></li>
+									{% else %}
+									<li><a href="logout.html">LogOut</a></li>
+									{% endif %}
+				          <!--li class="menu-has-children"><a href="">Pages</a>
 				            <ul>
 				              <li><a href="generic.html">Generic</a></li>
 				              <li><a href="elements.html">Elements</a></li>
 				            </ul>
-				          </li>
+				          </li-->
 				        </ul>
 				      </nav><!-- #nav-menu-container -->
 			    	</div>
@@ -614,7 +626,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		<script type="text/javascript">
 			var value=0;
 			var iteration = 1;
-			//$.ajax({url: "http://localhost:5000/load_data"});
+			//$.ajax({url: "load_data"});
 	    $(document).ready(function() {
 	      //$('select[multiple]').multiselect();
 	      $('select[multiple]').multiselect({
@@ -625,7 +637,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	      });
 	    });
 	    $(document).ready(function() {
-	      $.ajax({url: "http://localhost:5000/books.csv/"+value, success: function(response) {
+	      $.ajax({url: "books.html/"+value, success: function(response) {
 	        var book_titles = JSON.parse(response);
 	        for(var i=0; i<100; ++i) {
 	          $("select").append($('<option>').val(i+1).text(book_titles[i]));
@@ -650,7 +662,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	      }});
 	    });
 			function recursive(scroll_value) {
-				$.ajax({url: "http://localhost:5000/books.csv/"+value, success: function(response) {
+				$.ajax({url: "books.html/"+value, success: function(response) {
 					var book_titles = JSON.parse(response);
 					for(var i=0; i<100; ++i) {
 						$("select").append($('<option>').val(value+i+1).text(book_titles[i]));
@@ -684,11 +696,11 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 					var book_names = $('select').val();
 					console.log(book_names);
 					var input = $('<input type="hidden" name="book_list" value=' + book_names + ' />');
-					var form = jQuery('<form action="http://localhost:5000/get_recommendation" method="POST"><from>').append(input);
+					var form = jQuery('<form action="recommendations.html" method="POST"></from>').append(input);
 					$("body").append(form);
 					form.submit();
 					//$("body").remove(form);
-					/*$.ajax({url: "http://localhost:5000/get_recommendation", data: JSON.stringify(book_names), type: "POST", contentType: "application/json", success: function(response) {
+					/*$.ajax({url: "recommendations.html", data: JSON.stringify(book_names), type: "POST", contentType: "application/json", success: function(response) {
 						var recommended_books = JSON.parse(response);
 						console.log(recommended_books);
 					}});*/

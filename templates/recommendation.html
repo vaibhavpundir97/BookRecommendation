@@ -14,7 +14,7 @@
 		<!-- meta character set -->
 		<meta charset="UTF-8">
 		<!-- Site Title -->
-		<title>Book</title>
+		<title>Recommendations</title>
 
 		<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
 			<!--
@@ -34,6 +34,25 @@
 				.testomial-area {
 					padding-bottom: 100px;
 				}
+				h2 {
+				  text-align: center;
+				}
+
+				table caption {
+					padding: .5em 0;
+				}
+
+				@media screen and (max-width: 767px) {
+				  table caption {
+				    border-bottom: 1px solid #ddd;
+				  }
+				}
+
+				.p {
+				  text-align: center;
+				  padding-top: 140px;
+				  font-size: 14px;
+				}
 			</style>
 		</head>
 		<body>
@@ -46,8 +65,7 @@
 			      <nav id="nav-menu-container">
 			        <ul class="nav-menu">
 			          <li class="menu-active"><a href="http://localhost:5000">Home</a></li>
-			          <li><a href="login.html">Login</a></li>
-			          <li><a href="signup.html">Sign Up</a></li>
+			          <li><a href="logout.html"></a>Sign Out</li>
 			        </ul>
 			      </nav><!-- #nav-menu-container -->
 		    	</div>
@@ -68,42 +86,9 @@
 		<!-- About Generic Start -->
 		<div class="main-wrapper">
 
-			<section class="testomial-area pt-100">
-				<div class="container">
-					<div class="row d-flex justify-content-center">
-						<div class="menu-content pb-60 col-lg-8">
-							<div class="title text-center">
-								<h1 class="mb-10">What our Reader’s Say about us</h1>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="active-tstimonial-carusel">
-						</div>
-					</div>
-				</div>
-			</section>
-			<script src="{{ url_for('static', filename='js/vendor/jquery-2.2.4.min.js') }}"></script>
-			<script>
-				l=[]
-				//var loadallimages=function(){
-				var par=$(".active-tstimonial-carusel")[0]
-				{% for key,value in result[0].items() %}
-				dv=jQuery("<div>").addClass("single-testimonial item")
-				img=jQuery("<img />").addClass("mx-auto").appendTo(dv)[0]
-				img.src_toload="{{ value }}";
-				jQuery("<p />").addClass("desc").appendTo(dv)
-				jQuery("<h4 />").html("{{ key }}").appendTo(dv)
-				dv.appendTo(par);
-				l.push(img);
-				console.log('calling');
-				{% endfor %}
-			//}
-			</script>
-
 			<!-- Start testomial Area -->
 			<section class="testomial-area pt-100">
-				<div class="container">
+				<!--div class="container">
 					<div class="row d-flex justify-content-center">
 						<div class="menu-content pb-60 col-lg-8">
 							<div class="title text-center">
@@ -113,26 +98,37 @@
 					</div>
 					<div class="row">
 						<div class="active-tstimonial-carusel">
+
 						</div>
 					</div>
+				</div-->
+
+				<div class="container">
+				  <div class="row">
+				    <div class="col-xs-12">
+							<h1 class="mb-10">Here's What We got for You.</h1>
+				      <div class="table-responsive">
+				        <table class="table table-bordered table-hover">
+				          <thead>
+				            <tr>
+				              <th></th>
+				              <th>Book Cover</th>
+				              <th>Title</th>
+				              <th>Total Ratings</th>
+				              <th>Average Rating</th>
+				            </tr>
+				          </thead>
+				          <tbody>
+				          </tbody>
+				          <tfoot>
+				          </tfoot>
+				        </table>
+				      </div><!--end of .table-responsive-->
+				    </div>
+				  </div>
 				</div>
 			</section>
 			<!-- End testomial Area -->
-			<script>
-				//var loadallimages=function(){
-				var par=$(".active-tstimonial-carusel")[1]
-				{% for key,value in result[1].items() %}
-				dv=jQuery("<div>").addClass("single-testimonial item")
-				img=jQuery("<img />").addClass("mx-auto").appendTo(dv)[0]
-				img.src_toload="{{ value }}";
-				jQuery("<p />").addClass("desc").appendTo(dv)
-				jQuery("<h4 />").html("{{ key }}").appendTo(dv)
-				dv.appendTo(par);
-				l.push(img);
-				console.log('calling');
-				{% endfor %}
-			//}
-			</script>
 			<!-- Start Generic Area -->
 			<!--section class="about-generic-area section-gap">
 				<div class="container border-top-generic">
@@ -230,16 +226,45 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			<script src="{{ url_for('static', filename='js/mail-script.js') }}"></script>
 			<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 <script>
-	function load_images(){
-		for (i in l){
-			l[i].src=l[i].src_toload;
-			console.log(i);
+	function load_images(img_links){
+		for (i in img_links){
+			img_links[i].src=img_links[i].src_toload;
+			//console.log(i);
 		}
 	}
-	window.onload=load_images;
+	{% for id in result %}
+	var userID = {{ id  }};
+	{% endfor %}
+	//window.onload=load_images;
 	$(document).ready(function() {
-		$.ajax({type: "POST", contentType: "application/json", url: "autorecommendation.html", data: [userID, "user"], success: function(response) {
+		$.ajax({type: "POST", contentType: "application/json", url: "autorecommendation.html", data: JSON.stringify([userID, "item"]), success: function(response) {
 			var suggestions = JSON.parse(response);
+			//console.log(suggestions);
+			var img_links = []
+			//var par=$(".active-tstimonial-carusel")[0]
+			var tbody = $('tbody');
+			var cnt = 0;
+			for(book in suggestions) {
+				/**div=jQuery("<div>").addClass("single-testimonial item")
+				img=jQuery("<img />").addClass("mx-auto").appendTo(div)[0]
+				img.src_toload=suggestions[book];
+				jQuery("<p />").addClass("desc").appendTo(div)
+				jQuery("<h4 />").html(book).appendTo(div)
+				div.appendTo(par);*/
+				console.log(suggestions[book][1]);
+				img=jQuery("<img src='"+suggestions[book[1]]+"' />").addClass("mx-auto")
+				//img.src='"'+suggestions[book][1];+'"';
+				var tr = jQuery('<tr />')
+				$('<td />').html(cnt++).appendTo(tr);
+				var td = $('<td />').append(img)
+				td.appendTo(tr);
+				$('<td />').html(suggestions[book][0]).appendTo(tr);
+				$('<td />').html(suggestions[book][2]).appendTo(tr);
+				$('<td />').html(suggestions[book][3]).appendTo(tr);
+				tbody.append(tr);
+				//img_links.push(img);
+			}
+		//	load_images(img_links);
 		}});
 	});
 </script>
