@@ -30,17 +30,21 @@ def verify_login():
     passwd = request.form['pass'];
     con = sqlite3.connect('DataSet/BOOKS.db')
     cursor = con.cursor()
-    query = "select ID, Password from USERS_INFO where email = (?);"
+    query = "select Name, ID, Password from USERS_INFO where email = (?);"
     cursor.execute(query, (email,))
     print(email, passwd)
     pwd = cursor.fetchall()
     print(pwd)
     for p in pwd:
         print(p)
-        if p[1] == passwd:
-            return render_template('recommendation.html', result = [p[0]])
+        if p[2] == passwd:
+            return render_template('recommendation.html', result = {p[1]: p[0]})
     cursor.close()
     return render_template('login.html')
+
+@app.route('/active.html/<user_id>')
+def active_user(user_id):
+    return render_template('index.html', result = [user_id])
 
 @app.route('/signup.html')
 def signup_page():
@@ -219,14 +223,13 @@ def cleaningratings():
     users_imp_ratings = users[users.userID.isin(ratings_implicit.userID)]
 
 
-@app.route('/popularity.html')
+"""@app.route('/popularity.html')
 def popularitybasedrecommendation():
     #At this point , a simple popularity based recommendation system can be built based on count of user ratings for different books
     ratings_count = pd.DataFrame(ratings_explicit.groupby(['ISBN'])['bookRating'].sum())
     top10 = ratings_count.sort_values('bookRating', ascending = False).head(10)
-    ##print "Following books are recommended"
     top10.merge(books, left_index = True, right_on = 'ISBN')
-    #need to implement render_template
+    #need to implement render_template"""
 
 """@Collaborative Filtering"""
 
@@ -312,7 +315,6 @@ def filterdata():
     t = ratings.groupby('ISBN', as_index=False)['bookRating'].mean()
     average_rating = dict(zip(t['ISBN'].values, t['bookRating'].values))
     ratings_count = ratings.ISBN.value_counts()
-    #print(ratings_matrix.index.values)
 
 #This function predicts rating for specified user-item combination based on user-based approach
 #@app.route('userbased.html')
@@ -325,24 +327,15 @@ def predict_userbased(user_id, item_id, ratings, metric = metric, k=k):
     sum_wt = np.sum(similarities)-1
     product=1
     wtd_sum = 0
+    #print(len(indices.flatten()))
     prediction = int(round(mean_rating + sum([(ratings.iloc[indices.flatten()[i],item_loc]-np.mean(ratings.iloc[indices.flatten()[i],:]))*similarities[i] for i in range(len(indices.flatten())) if indices.flatten()[i] != user_loc])/sum_wt))
-    '''for i in range(0, len(indices.flatten())):
-        if indices.flatten()[i] == user_loc:
-            continue;
-        else:
-            ratings_diff = ratings.iloc[indices.flatten()[i],item_loc]-np.mean(ratings.iloc[indices.flatten()[i],:])
-            product = ratings_diff * (similarities[i])
-            wtd_sum = wtd_sum + product'''
-
+    #prediction = int(round(prediction * 1.8))
     #in case of very sparse datasets, using correlation metric for collaborative based approach may give negative ratings
     #which are handled here as below
     if prediction <= 0:
         prediction = 1
     elif prediction >10:
         prediction = 10
-
-    #prediction = int(round(mean_rating + (wtd_sum/sum_wt)))
-    #print '\nPredicted rating for user {0} -> item {1}: {2}'.format(user_id,item_id,prediction)
 
     return prediction
 
@@ -384,15 +377,9 @@ def predict_itembased(user_id, item_id, ratings, metric = metric, k=k):
     similarities, indices=findksimilaritems(item_id, ratings) #similar users based on correlation coefficients
     sum_wt = np.sum(similarities)-1
     product=1
+    #print(len(indices.flatten()))
     prediction = int(round(sum([ratings.iloc[user_loc,indices.flatten()[i]] * (similarities[i]) for i in range(len(indices.flatten())) if indices.flatten()[i] != item_loc])/sum_wt))
-    '''for i in range(0, len(indices.flatten())):
-        if indices.flatten()[i] == item_loc:
-            continue;
-        else:
-            product = ratings.iloc[user_loc,indices.flatten()[i]] * (similarities[i])
-            wtd_sum = wtd_sum + product
-    prediction = int(round(wtd_sum/sum_wt))'''
-
+    #prediction = int(round(prediction * 1.8))
     #in case of very sparse datasets, using correlation metric for collaborative based approach may give negative ratings
     #which are handled here as below //code has been validated without the code snippet below, below snippet is to avoid negative
     #predictions which might arise in case of very sparse datasets when using correlation metric
@@ -401,63 +388,48 @@ def predict_itembased(user_id, item_id, ratings, metric = metric, k=k):
     elif prediction >10:
         prediction = 10
 
-    #print '\nPredicted rating for user {0} -> item {1}: {2}'.format(user_id,item_id,prediction)
-
     return prediction
 
 #This function utilizes above functions to recommend items for item/user based approach and cosine/correlation.
 #Recommendations are made if the predicted rating for an item is >= to 6,and the items have not been rated already
 @app.route('/autorecommendation.html', methods = ["POST"])
 def recommendItem():
-    #print("in")
     ratings = ratings_matrix
     user_id = str(request.json[0])
-    #print(type(user_id))
     approach = request.json[1]
-    metric = sample(['correlation', 'cosine'], 1)[0]
-    '''if (user_id not in ratings.index.values) or type(user_id) is not int:
-        print("User id should be a valid integer from this list :\n\n {} ".format(re.sub('[\[\]]', '', np.array_str(ratings_matrix.index.values))))
-    else:'''
-    #ids = ['Item-based (correlation)','Item-based (cosine)','User-based (correlation)','User-based (cosine)']
-    #select = widgets.Dropdown(options=ids, value=ids[0],description='Select approach', width='1000px')
-    #def on_change(change):
-    #clear_output(wait=True)
-    #if change['type'] == 'change' and change['name'] == 'value':
-    """if (approach == 'Item-based (correlation)') | (approach == 'User-based (correlation)') :
-        metric = 'correlation'
-    else:
-        metric = 'cosine'"""
-       # with suppress_stdout():
-    #print("approach")
+    metric = 'cosine'#sample(['correlation', 'cosine'], 1)[0]
+    print(ratings.shape[1])
     if (approach == 'item'):
-        #print("in app")
-        prediction = [predict_itembased(user_id, str(ratings.columns[i]) ,ratings, metric) if ratings[str(ratings.columns[i])][user_id] !=0 else -1 for i in range(ratings.shape[1])]
-        '''for i in range(ratings.shape[1]):
-            if (ratings[str(ratings.columns[i])][user_id] !=0): #not rated already
-                prediction.append(predict_itembased(user_id, str(ratings.columns[i]) ,ratings, metric))
-            else:
-                prediction.append(-1) #for already rated items'''
+        prediction = [predict_itembased(user_id, str(ratings.columns[i]) ,ratings, metric) if ratings[str(ratings.columns[i])][user_id] !=0 else -1 for i in range(1000)]
     else:
-        #print("in app")
-        prediction = [predict_userbased(user_id, str(ratings.columns[i]) ,ratings, metric) if ratings[str(ratings.columns[i])][user_id] !=0 else -1 for i in range(ratings.shape[1])]
-        '''for i in range(ratings.shape[1]):
-            #print("in for")
-            #print(ratings[str(ratings.columns[i])][4385])
-            if (ratings[str(ratings.columns[i])][user_id] !=0): #not rated already
-                #print("in if")
-                prediction.append(predict_userbased(user_id, str(ratings.columns[i]) ,ratings, metric))
-            else:
-                #print("in else")
-                prediction.append(-1) #for already rated items'''
-    #print("prediction")
+        prediction = [predict_userbased(user_id, str(ratings.columns[i]) ,ratings, metric) if ratings[str(ratings.columns[i])][user_id] !=0 else -1 for i in range(1000)]
     prediction = pd.Series(prediction)
     prediction = prediction.sort_values(ascending=False)
     recommended = prediction[:10]
-    #print("recommend")
-    #print("As per {0} approach....Following books are recommended...".format(approach))
     recommendations = []
     for i in range(len(recommended)):
-        data = list(books.loc[recommended.index[i], ['ISBN', 'bookTitle', 'imageUrlL']].values)
+        data = list(books.loc[recommended.index[i], ['ISBN', 'bookTitle', 'imageUrlS']].values)
+        try:
+            data.append(int(ratings_count[data[0]]))
+            data.append(int(average_rating[data[0]]))
+        except:
+            data.append(2)
+            data.append(sum(average_rating.values())/len(average_rating))
+        recommendations.append(data[1:])
+    return json.dumps(recommendations)
+
+@app.route('/average_rating.html')
+def averagerating():
+    con=sqlite3.connect("DataSet/books_ratings.db")
+    data=pd.read_sql_query('select book_id, authors, title, average_rating, image_url, ratings_count from books;', con)
+    con.close()
+    recommended = data.sort_values('average_rating', ascending = False).head(10)
+    print(recommended)
+    print([i for i in recommended])
+    print(list(recommended))
+    recommendations = []
+    """for i in range(len(recommended)):
+        data = list(books.loc[recommended.index[i], ['ISBN', 'bookTitle', 'imageUrlS']].values)
         try:
             data.append(int(ratings_count[data[0]]))
             data.append(int(average_rating[data[0]]))
@@ -466,10 +438,28 @@ def recommendItem():
             data.append(sum(average_rating.values())/len(average_rating))
         recommendations.append(data[1:])
     '''for i in range(len(recommended)):
-         print("{0}. {1}".format(i+1,books.bookTitle[recommended.index[i]]))'''
+         print("{0}. {1}".format(i+1,books.bookTitle[recommended.index[i]]))'''"""
+    #for i in range(len(recommended)):
+    #    recommendations.append(recommended.index[i][["book_id","title","average_rating","image_url"]].values)
+    recommendations=[list(x) for x in recommended[["title","image_url","ratings_count","average_rating"]].values]
+    print(recommendations)
     return json.dumps(recommendations)
-    #select.observe(on_change)
-    ##display(select)
+
+@app.route('/popularity.html')
+def popularitybasedrecommendation():
+    con=sqlite3.connect("DataSet/books_ratings.db")
+    data=pd.read_sql_query('select book_id, authors, title, average_rating, image_url, ratings_count from books;', con)
+    con.close()
+    recommended = data.sort_values('ratings_count', ascending = False).head(10)
+    print(recommended)
+    print([i for i in recommended])
+    print(list(recommended))
+    recommendations = []
+    #for i in range(len(recommended)):
+    #    recommendations.append(recommended.index[i][["book_id","title","average_rating","image_url"]].values)
+    recommendations=[list(x) for x in recommended[["title","image_url","ratings_count","average_rating"]].values]
+    print(recommendations)
+    return json.dumps(recommendations)
 
 if __name__ == '__main__':
     load_data()

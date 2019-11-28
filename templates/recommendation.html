@@ -53,6 +53,32 @@
 				  padding-top: 140px;
 				  font-size: 14px;
 				}
+
+				span.stars, span.stars span {
+				  display: block;
+				  background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/747/star-o-white.svg) 0 0 repeat-x;
+				  width: 200px; /* width of a star multiplied by 5 */
+				  height: 40px; /* the height of the star */
+				  background-size: 40px 40px;
+				}
+
+				span.stars span {
+				  background-position: 0 0;
+				  background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/747/star.svg);
+				}
+				.loader {
+				  border: 16px solid #f3f3f3; /* Light grey */
+				  border-top: 16px solid #3498db; /* Blue */
+				  border-radius: 50%;
+				  width: 120px;
+				  height: 120px;
+				  animation: spin 2s linear infinite;
+				}
+
+				@keyframes spin {
+				  0% { transform: rotate(0deg); }
+				  100% { transform: rotate(360deg); }
+				}
 			</style>
 		</head>
 		<body>
@@ -64,8 +90,8 @@
 			      </div>
 			      <nav id="nav-menu-container">
 			        <ul class="nav-menu">
-			          <li class="menu-active"><a href="http://localhost:5000">Home</a></li>
-			          <li><a href="logout.html"></a>Sign Out</li>
+			          <li class="menu-active"><a href="active.html"><b>Home</b></a></li>
+			          <li><a href="logout.html"><b>Sign Out</b></a></li>
 			        </ul>
 			      </nav><!-- #nav-menu-container -->
 		    	</div>
@@ -76,6 +102,10 @@
 					<div class="row height align-items-center justify-content-center">
 						<div class="col-lg-10">
 							<div class="generic-banner-content">
+								{% for key, value in result.items() %}
+								<h2 class="text-white text-uppercase">Hey, {{ value }} !</h2>
+								{% endfor %}
+								<h4 class="text-white text-uppercase">We got recommendations for you.</h4>
 							</div>
 						</div>
 					</div>
@@ -119,6 +149,10 @@
 				            </tr>
 				          </thead>
 				          <tbody>
+										<tr>
+											<td colspan="5"><center><div class="loader"></div>
+</td></center>
+										</tr>
 				          </tbody>
 				          <tfoot>
 				          </tfoot>
@@ -129,33 +163,6 @@
 				</div>
 			</section>
 			<!-- End testomial Area -->
-			<!-- Start Generic Area -->
-			<!--section class="about-generic-area section-gap">
-				<div class="container border-top-generic">
-					<h3 class="about-title mb-30">Elaboration about Generic Page</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="img-text">
-								<img src="{{ url_for('static', filename='img/b1.jpg') }}" alt="" class="img-fluid float-left mr-20 mb-20">
-								<p>Recently, the US Federal government banned online casinos from operating in America by making it illegal to transfer money to them through any US bank or payment system. As a result of this law, most of the popular online casino networks such as Party Gaming and PlayTech left the United States. Overnight, online casino players found themselves being chased by the Federal government. But, after a fortnight, the online casino industry came up with a solution and new online casinos started taking root. These began to operate under a different business umbrella, and by doing that, rendered the transfer of money to and from them legal. A major part of this was enlisting electronic banking systems that would accept this new clarification and start doing business with me. Listed in this article are the electronic banking systems that accept players from the United States that wish to play in online casinos.</p>
-							</div>
-						</div>
-						<div class="col-lg-12">
-							<p>Recently, the US Federal government banned online casinos from operating in America by making it illegal to transfer money to them through any US bank or payment system. As a result of this law, most of the popular online casino networks such as Party Gaming and PlayTech left the United States. Overnight, online casino players found themselves being chased by the Federal government. But, after a fortnight, the online casino industry came up with a solution and new online casinos started taking root. These began to operate under a different business umbrella, and by doing that, rendered the transfer of money to and from them legal. A major part of this was enlisting electronic banking systems that would accept this new clarification and start doing business with me. Listed in this article are the electronic banking systems that accept players from the United States that wish to play in online casinos.</p>
-						</div>
-						<div class="col-lg-12">
-							<p>Recently, the US Federal government banned online casinos from operating in America by making it illegal to transfer money to them through any US bank or payment system. As a result of this law, most of the popular online casino networks such as Party Gaming and PlayTech left the United States. Overnight, online casino players found themselves being chased by the Federal government. But, after a fortnight, the online casino industry came up with a solution and new online casinos started taking root. These began to operate under a different business umbrella, and by doing that, rendered the transfer of money to and from them legal. A major part of this was enlisting electronic banking systems that would accept this new clarification and start doing business with me. Listed in this article are the electronic banking systems that accept players from the United States that wish to play in online casinos.</p>
-						</div>
-						<div class="col-md-12">
-							<div class="img-text">
-								<img src="{{ url_for('static', filename='img/b2.jpg') }}" alt="" class="img-fluid float-left mr-20 mb-20">
-								<p>Recently, the US Federal government banned online casinos from operating in America by making it illegal to transfer money to them through any US bank or payment system. As a result of this law, most of the popular online casino networks such as Party Gaming and PlayTech left the United States. Overnight, online casino players found themselves being chased by the Federal government. But, after a fortnight, the online casino industry came up with a solution and new online casinos started taking root. These began to operate under a different business umbrella, and by doing that, rendered the transfer of money to and from them legal. A major part of this was enlisting electronic banking systems that would accept this new clarification and start doing business with me. Listed in this article are the electronic banking systems that accept players from the United States that wish to play in online casinos.</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section-->
-			<!-- End Generic Start -->
 
 			<!-- start footer Area -->
 			<footer class="footer-area section-gap">
@@ -165,7 +172,7 @@
 							<div class="single-footer-widget">
 								<h6>About Us</h6>
 								<p>
-									Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore dolore magna aliqua.
+									We recommend books to our users based on their interests. To find out yours <span class="font-weight-bold text-uppercase">sign up</span> now.
 								</p>
 								<p class="footer-text">
 								<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
@@ -232,38 +239,58 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			//console.log(i);
 		}
 	}
-	{% for id in result %}
-	var userID = {{ id  }};
+	var starWidth = 40;
+
+	$.fn.stars = function() {
+	  return $(this).each(function() {
+	    $(this).html($('<span />').width(Math.max(0, (Math.min(5, parseFloat($(this).html())))) * starWidth));
+	  });
+	}
+	function starRatings() {
+	  $('span.stars').stars();
+	};
+
+	{% for key, value in result.items() %}
+	var userID = {{ key }};
 	{% endfor %}
+	$('#nav-menu-container > ul > li.menu-active > a').attr('href', 'active.html/'+userID)
 	//window.onload=load_images;
 	$(document).ready(function() {
 		$.ajax({type: "POST", contentType: "application/json", url: "autorecommendation.html", data: JSON.stringify([userID, "item"]), success: function(response) {
 			var suggestions = JSON.parse(response);
-			//console.log(suggestions);
 			var img_links = []
-			//var par=$(".active-tstimonial-carusel")[0]
 			var tbody = $('tbody');
+			tbody.empty();
 			var cnt = 0;
 			for(book in suggestions) {
-				/**div=jQuery("<div>").addClass("single-testimonial item")
-				img=jQuery("<img />").addClass("mx-auto").appendTo(div)[0]
-				img.src_toload=suggestions[book];
-				jQuery("<p />").addClass("desc").appendTo(div)
-				jQuery("<h4 />").html(book).appendTo(div)
-				div.appendTo(par);*/
 				console.log(suggestions[book][1]);
-				img=jQuery("<img src='"+suggestions[book[1]]+"' />").addClass("mx-auto")
-				//img.src='"'+suggestions[book][1];+'"';
+				img=jQuery("<img />").addClass("mx-auto")
 				var tr = jQuery('<tr />')
-				$('<td />').html(cnt++).appendTo(tr);
+				$('<td />').html(++cnt).appendTo(tr);
 				var td = $('<td />').append(img)
 				td.appendTo(tr);
 				$('<td />').html(suggestions[book][0]).appendTo(tr);
 				$('<td />').html(suggestions[book][2]).appendTo(tr);
-				$('<td />').html(suggestions[book][3]).appendTo(tr);
+				if(parseFloat(suggestions[book][3]) < 2)
+					var r = 1
+				else {
+					var r = suggestions[book][3]/2;
+				}
+				console.log(r);
+				$('<td />').html($('<span class="stars"/>').html(r)).appendTo(tr);
 				tbody.append(tr);
+				img[0].src=suggestions[book][1];
+				img[0].alt = "{{ url_for('static', filename='img/def.png') }}"
+				img[0].onload = function() {
+					if(this.width <= 10)
+						this.src = this.alt;
+				}
+				img[0].onerror = function() {
+						this.src = this.alt;
+				}
 				//img_links.push(img);
 			}
+			starRatings();
 		//	load_images(img_links);
 		}});
 	});
